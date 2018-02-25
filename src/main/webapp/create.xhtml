@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>WEB SERVICE - UNIVERSITY STUDENTS</title>
+    <p align="center"><h:outputText value="UNIVERSITY STUDENTS"/></p>
+</h:head>
+<f:view>
+    <body>
+    <h:form>
+
+        <p:panel header="Панель добавления студентов в базу данных"
+                 style="text-align: center">
+            <p:panelGrid columns="2"
+                         style="text-align: center">
+                <f:facet name="header">
+                    Добавить студента
+                </f:facet>
+                <p:column>
+                    <p:inputText value="#{wpCDI.name}"/>
+                </p:column>
+                <p:column>
+                    <p:inputText value="#{wpCDI.faculty}"/>
+                </p:column>
+                <p:column>
+                    <p:outputLabel value="ФИО студента"/>
+                </p:column>
+                <p:column>
+                    <p:outputLabel value="Факультет"/>
+                </p:column>
+            </p:panelGrid>
+            <p:commandButton value="Добавить" action="#{wpCDI.createStudent}"
+                             update="studentslist, printinfo"/>
+        </p:panel>
+
+        <p:panel header="Выводимая информация" style="text-align: center">
+            <p:outputLabel value="#{wpCDI.printInfo}" id="printinfo"/>
+        </p:panel>
+
+        <p:spacer height="30"/>
+
+        <p:dataTable id="studentslist" var="students" value="#{wpCDI.allStudents}"
+                     selection="#{wpCDI.selectedStudents}" rowKey="#{students.name}" scrollable="true"
+                     scrollHeight="300">
+            <f:facet name="header">
+                Студенты
+            </f:facet>
+            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+            <p:column headerText="ФИО студента">
+                <p:outputLabel value="#{students.name}" style="text-align: left"/>
+            </p:column>
+            <p:column headerText="Факультет студента">
+                <p:outputLabel value="#{students.faculty}" style="text-align: left"/>
+            </p:column>
+        </p:dataTable>
+
+        <p:spacer height="30"/>
+
+        <p:panel style="text-align: center">
+            <p:commandButton value="Удалить" action="#{wpCDI.removeStudentFromList}"
+                             update="studentslist, printinfo"/>
+        </p:panel>
+
+    </h:form>
+    </body>
+</f:view>
+</html>
