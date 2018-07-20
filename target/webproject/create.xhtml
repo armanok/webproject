@@ -37,6 +37,8 @@
                              update="studentslist, printinfo"/>
         </p:panel>
 
+        <p:spacer height="30"/>
+
         <p:panel header="Выводимая информация" style="text-align: center">
             <p:outputLabel value="#{wpCDI.printInfo}" id="printinfo"/>
         </p:panel>
@@ -44,17 +46,28 @@
         <p:spacer height="30"/>
 
         <p:dataTable id="studentslist" var="students" value="#{wpCDI.allStudents}"
-                     selection="#{wpCDI.selectedStudents}" rowKey="#{students.name}" scrollable="true"
-                     scrollHeight="300">
+                      scrollable="true"
+                     scrollHeight="300" editable="true" selection="#{wpCDI.selectedStudents}" rowKey="#{students.name}">
             <f:facet name="header">
                 Студенты
             </f:facet>
             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
             <p:column headerText="ФИО студента">
-                <p:outputLabel value="#{students.name}" style="text-align: left"/>
+                <p:cellEditor>
+                    <!--p:outputLabel value="#{students.name}" style="text-align: left"/-->
+                    <f:facet name="output"><h:outputText value="#{students.name}"></h:outputText></f:facet>
+                    <f:facet name="input"><p:inputText value="#{students.name}"/></f:facet>
+                </p:cellEditor>
             </p:column>
             <p:column headerText="Факультет студента">
-                <p:outputLabel value="#{students.faculty}" style="text-align: left"/>
+                <p:cellEditor>
+                    <!--p:outputLabel value="#{students.faculty}" style="text-align: left"/-->
+                    <f:facet name="output"><h:outputText value="#{students.faculty}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{students.faculty}"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column style="width:16px">
+                <p:rowEditor />
             </p:column>
         </p:dataTable>
 

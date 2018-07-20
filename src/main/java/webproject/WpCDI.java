@@ -1,14 +1,17 @@
 package webproject;
 
+import org.primefaces.context.RequestContext;
+
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 //Сессионный CDI бин для взаимодействия с JSF страницами и передачи данных в EJB класс
-
 @Named
 @SessionScoped
 public class WpCDI implements Serializable {
@@ -19,6 +22,10 @@ public class WpCDI implements Serializable {
 
     private String name;
     private String faculty;
+
+    private String username;
+    private String password;
+
     //Поле для вывода текущей информации на экран
     private String printInfo = "Информация о студенте";
     //Поле для сохранения списка выбранных студентов для удаления из БД
@@ -48,6 +55,22 @@ public class WpCDI implements Serializable {
         this.faculty = faculty;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getPrintInfo() {
         return printInfo;
     }
@@ -69,5 +92,16 @@ public class WpCDI implements Serializable {
     //Метод для отображения списка студентов из БД в таблицу веб интерфейса сервиса. Возвращает список сущностей. Список сущностей берется из EJB
     public List<WpEntity> getAllStudents() {
         return wpEJB.getAllStudents();
+    }
+
+    //Метод для проверки вводимых данных на странице авторизации(логин и пароль)
+    public String loginControl(){
+        if (wpEJB.loginControl(username, password)){
+            return "create.xhtml?faces-redirect=true";
+        }
+        RequestContext.getCurrentInstance().update("growl");
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User or Password invalid!!!"));
+        return "";
     }
 }

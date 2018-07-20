@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class WpEJB {
 
     //Менеджер сущностей для работы с классом WpEntity, отображающимся на БД
     @PersistenceContext(unitName = "wpPU")
+    //@PersistenceUnit(unitName = "wpPU")
     private EntityManager entityManager;
 
     //Поле для сохранения и вывода на экран текущей информации
@@ -56,7 +58,7 @@ public class WpEJB {
         return query.getResultList();
     }
 
-    //Метод удаления записей из БД. Использует список selectStudents для сохранения списка выбранных полей
+    //Метод удаления записей из БД. Использует список selectedStudents для сохранения списка выбранных полей
     public String removeStudentFromList(ArrayList<WpEntity> selectedStudents) {
 
         //Поле метода для сохранения текущего ФИО из списка возвращаемых записей
@@ -80,5 +82,13 @@ public class WpEJB {
         if (selectedStudents.size() == 1) {
             return printInfo = name + " удален(а) из БД";
         } else return printInfo = "Студенты удалены из БД";
+    }
+
+    //Метод для проверки вводимых данных на странице авторизации(логин и пароль)
+    public boolean loginControl(String username, String password){
+        Login l = entityManager.find(Login.class, username);
+        if (l !=null && password.equals(l.getPassword())){
+            return true;
+        } else return false;
     }
 }
